@@ -2,7 +2,10 @@ import { NextResponse } from "next/server";
 import type { ChatResponse } from "@/app/types/chat";
 
 export async function POST(request: Request) {
-  const { message } = await request.json();
+  const { content, thread_id, id_viajero } = await request.json();
+
+  try {
+  } catch (error) {}
 
   // Here you would normally make a call to your backend
   // For now, we'll just return a mock response

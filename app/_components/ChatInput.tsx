@@ -23,7 +23,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage }) => {
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           placeholder="Escribe un mensaje..."
-          className="flex-1 rounded-lg border p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="flex-1 rounded-lg border p-2 text-black placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         <button
           type="submit"
