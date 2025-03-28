@@ -31,3 +31,13 @@ export interface ChatResponse {
   content: (MessageContent | SliderImage)[];
   reservasEnProceso: Reservation[];
 }
+export interface FetchChatResponse {
+  ok: boolean;
+  response: {
+    thread_id: string;
+    value: {
+      content: (MessageContent | SliderImage)[];
+      reservasEnProceso: Reservation[];
+    };
+  };
+}
