@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import type { FetchChatResponse } from "@/app/types/chat";
 
 export async function POST(request: Request) {
-  const { content, thread_id, id_viajero } = await request.json();
+  const { message, thread_id, id_viajero } = await request.json();
 
   try {
     const res = await fetch(`http://localhost:3001/chat`, {
@@ -12,7 +12,11 @@ export async function POST(request: Request) {
         "Content-Type": "application/json",
       },
       cache: "no-store",
-      body: JSON.stringify({ content, thread_id, id_viajero }),
+      body: JSON.stringify({
+        content: message,
+        thread_id,
+        user_id: id_viajero,
+      }),
     });
 
     const response: FetchChatResponse = await res.json();

@@ -5,11 +5,12 @@ import { ChatMessage } from "./_components/ChatMessage";
 import { ImageSlider } from "./_components/ImageSlider";
 import { ReservationPanel } from "./_components/ReservationPanel";
 import { ChatInput } from "./_components/ChatInput";
-import type { ChatResponse, ChatContent, Reservation } from "./types/chat";
+import type { FetchChatResponse, ChatContent, Reservation } from "./types/chat";
 
 export default function Home() {
   const [chatHistory, setChatHistory] = useState<ChatContent[]>([]);
   const [reservations, setReservations] = useState<Reservation[]>([]);
+  const [thread, setThread] = useState<string>("");
 
   const handleSendMessage = async (message: string) => {
     try {
@@ -18,12 +19,18 @@ export default function Home() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ message }),
+        body: JSON.stringify({
+          message,
+          thread_id: thread != "" ? thread : null,
+          id_viajero: "1234567890",
+        }),
       });
 
-      const data: ChatResponse = await response.json();
-      setChatHistory((prev) => [...prev, ...data.content]);
-      setReservations(data.reservasEnProceso);
+      const data: FetchChatResponse = await response.json();
+      console.log(data);
+      setThread(data.response.thread_id);
+      setChatHistory((prev) => [...prev, ...data.response.value.content]);
+      setReservations(data.response.value.reservasEnProceso);
     } catch (error) {
       console.error("Error sending message:", error);
     }
