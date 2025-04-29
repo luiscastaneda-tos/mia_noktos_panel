@@ -2,17 +2,26 @@
 
 import React, { useState } from "react";
 import { ChatMessage } from "./_components/ChatMessage";
-import { ImageSlider } from "./_components/ImageSlider";
 import { ReservationPanel } from "./_components/ReservationPanel";
+import { UserMessage } from "./_components/UserMessage";
 import { ChatInput } from "./_components/ChatInput";
 import type { FetchChatResponse, ChatContent, Reservation } from "./types/chat";
+import { HotelCard } from "./_components/HotelCard";
 
 export default function Home() {
   const [chatHistory, setChatHistory] = useState<ChatContent[]>([]);
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [thread, setThread] = useState<string>("");
 
-  const handleSendMessage = async (message: string) => {
+  const handleSendMessage = (message: string) => {
+    setChatHistory((prev) => [
+      ...prev,
+      { component_type: "user", content: message },
+    ]);
+    sendMessageToChat(message);
+  };
+
+  const sendMessageToChat = async (message: string) => {
     try {
       const response = await fetch("/api/chat", {
         method: "POST",
@@ -48,8 +57,11 @@ export default function Home() {
                   {content.component_type === "message" && content.content && (
                     <ChatMessage content={content.content} />
                   )}
-                  {content.component_type === "slider" && content.images && (
-                    <ImageSlider images={content.images} />
+                  {content.component_type === "hotel" && content.id_hotel && (
+                    <HotelCard id_hotel={content.id_hotel} />
+                  )}
+                  {content.component_type === "user" && content.content && (
+                    <UserMessage message={content.content} />
                   )}
                 </div>
               ))}

@@ -1,54 +1,69 @@
+"use client";
 import React, { useState } from "react";
-import Image from "next/image";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface ImageSliderProps {
   images: string[];
+  onImageClick: () => void;
 }
 
-export const ImageSlider: React.FC<ImageSliderProps> = ({ images }) => {
+export const ImageSlider: React.FC<ImageSliderProps> = ({
+  images,
+  onImageClick,
+}) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const nextImage = () => {
-    setCurrentIndex((prev) => (prev + 1) % images.length);
+  const nextSlide = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
   };
 
-  const previousImage = () => {
-    setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
+  const prevSlide = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
   };
 
   return (
-    <div className="relative w-full h-64 mb-4 rounded-lg overflow-hidden">
-      <Image
+    <div
+      className="relative h-48 w-full overflow-hidden rounded-t-xl"
+      onClick={onImageClick}
+    >
+      <img
         src={images[currentIndex]}
         alt={`Slide ${currentIndex + 1}`}
-        layout="fill"
-        objectFit="cover"
-        loader={({ src }) => src} // Custom loader to allow all domains
+        className="h-full w-full object-cover transition-transform duration-500"
       />
+      {/* <Image
+        src={images[currentIndex]}
+        alt={`Slide ${currentIndex + 1}`}
+        className="h-full w-full object-cover transition-transform duration-500"
+        width={0}
+        height={0}
+        sizes="100vw"
+        priority
+      /> */}
 
-      <div className="absolute inset-0 flex items-center justify-between p-4">
-        <button
-          onClick={previousImage}
-          className="bg-black/50 text-white p-2 rounded-full hover:bg-black/70"
-        >
-          ←
-        </button>
-        <button
-          onClick={nextImage}
-          className="bg-black/50 text-white p-2 rounded-full hover:bg-black/70"
-        >
-          →
-        </button>
-      </div>
+      <button
+        onClick={prevSlide}
+        className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-black/50 p-1.5 text-white transition-colors hover:bg-black/75"
+      >
+        <ChevronLeft size={16} />
+      </button>
 
-      <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2">
+      <button
+        onClick={nextSlide}
+        className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-black/50 p-1.5 text-white transition-colors hover:bg-black/75"
+      >
+        <ChevronRight size={16} />
+      </button>
+
+      <div className="absolute bottom-2 left-1/2 flex -translate-x-1/2 gap-1.5">
         {images.map((_, index) => (
-          <button
+          <div
             key={index}
-            className={`w-2 h-2 rounded-full ${
+            className={`h-1.5 w-1.5 rounded-full ${
               index === currentIndex ? "bg-white" : "bg-white/50"
             }`}
-            onClick={() => setCurrentIndex(index)}
           />
         ))}
       </div>

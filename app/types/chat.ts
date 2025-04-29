@@ -13,11 +13,17 @@ interface MessageContent {
   component_type: "message";
   content: string;
 }
-interface SliderImage {
-  component_type: "slider";
-  images: string[];
+interface CardHotel {
+  component_type: "hotel";
+  id_hotel: string;
 }
-export type ChatContent = MessageContent | SliderImage;
+
+interface UserMessage {
+  component_type: "user";
+  content: string;
+}
+
+export type ChatContent = MessageContent | CardHotel | UserMessage;
 
 export interface Reservation {
   check_in: string;
@@ -28,7 +34,7 @@ export interface Reservation {
 }
 
 export interface ChatResponse {
-  content: (MessageContent | SliderImage)[];
+  content: (MessageContent | CardHotel)[];
   reservasEnProceso: Reservation[];
 }
 export interface FetchChatResponse {
@@ -36,7 +42,7 @@ export interface FetchChatResponse {
   response: {
     thread_id: string;
     value: {
-      content: (MessageContent | SliderImage)[];
+      content: (MessageContent | CardHotel)[];
       reservasEnProceso: Reservation[];
     };
   };
